@@ -18,16 +18,78 @@ form.addEventListener("submit", e => {
     const department = departmentSelect.value;
     const bottles = Number(document.querySelector("#bottles").value);
 
+    const price = calculatePrice(department, bottles);
+
+    result.hidden = false;
+
+    result.innerHTML = price
+        .map(item => `
+            <div>
+                ${item.method} : <strong>${item.price.toFixed(2)} €</strong>
+            </div>
+        `)
+        .join("");
+});
+
+function calculateParcelPrice(department, bottles) {
     const index = pricing.steps.findIndex(step => bottles <= step);
 
     if (index === -1) {
-        result.hidden = false;
-        result.textContent = "Nombre de bouteilles non supporté";
-        return;
+        throw new Error("Nombre de bouteilles non supporté");
     }
 
-    const price = pricing.departments[department][index];
+    return pricing.departments[department][index];
+}
 
-    result.hidden = false;
-    result.textContent = `${price.toFixed(2)} €`;
-});
+function calculatePrice(department, bottles) {
+    if (bottles <= 78) {
+        return [
+            {
+                method: "parcel",
+                price: calculateParcelPrice(department, bottles),
+            }
+        ];
+    }
+
+    const weightPrice = calculateWeightPrice(department, bottles);
+    const palletPrice = calculatePalletPrice(department, bottles);
+
+    return [
+        {
+            method: "weight",
+            price: weightPrice,
+        },
+        {
+            method: "pallet",
+            price: palletPrice,
+        }
+    ];
+}
+
+function calculateWeightPrice(department, bottles) {
+    const weight = bottles * 1.240;
+
+    if (weight < 100) {
+        return null;
+    }
+
+    if (weight <= 250) {
+        return pricing.weight.price100to250[department] * (weight / 100);
+    }
+
+    return pricing.weight.priceOver250[department] * (weight / 250);
+}
+
+function calculatePalletPrice(department, bottles) {
+    const pallets = Math.ceil(bottles / 600);
+
+    if (pallets === 1) {
+        return pricing.pallet.one[department];
+    }
+
+    if (pallets === 2) {
+        return pricing.pallet.two[department];
+    }
+
+    return null;
+}
