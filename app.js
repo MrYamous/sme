@@ -4,6 +4,9 @@ const form = document.querySelector("#calculator");
 const departmentSelect = document.querySelector("#department");
 const result = document.querySelector("#result");
 
+const fuelMultiplierInput = document.querySelector("#fuelMultiplier");
+fuelMultiplierInput.value = pricing.fuelMultiplier;
+
 for (const department of Object.keys(pricing.departments)) {
     const option = document.createElement("option");
     option.value = department;
@@ -18,7 +21,9 @@ form.addEventListener("submit", e => {
     const department = departmentSelect.value;
     const bottles = Number(document.querySelector("#bottles").value);
 
-    const price = calculatePrice(department, bottles);
+    const fuelMultiplier = Number(fuelMultiplierInput.value);
+
+    const price = calculatePrice(department, bottles, fuelMultiplier);
 
     result.hidden = false;
 
@@ -41,12 +46,12 @@ function calculateParcelPrice(department, bottles) {
     return pricing.departments[department][index];
 }
 
-function calculatePrice(department, bottles) {
+function calculatePrice(department, bottles, fuelMultiplier) {
     if (bottles <= 78) {
         return [
             {
                 method: "parcel",
-                price: calculateParcelPrice(department, bottles),
+                price: calculateParcelPrice(department, bottles) * fuelMultiplier,
             }
         ];
     }
@@ -57,7 +62,7 @@ function calculatePrice(department, bottles) {
     return [
         {
             method: "weight",
-            price: weightPrice,
+            price: weightPrice * fuelMultiplier,
         },
         {
             method: "pallet",
