@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculateur de livraison</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="container">
+
+    <h1>Calculateur de livraison</h1>
+
+    <form id="calculator">
+
+        <label>
+            Département
+            <select id="department"></select>
+        </label>
+
+        <label>
+            Nombre de bouteilles
+            <input
+                id="bottles"
+                type="number"
+                min="1"
+                required
+            >
+        </label>
+
+        <button type="submit">
+            Calculer
+        </button>
+
+    </form>
+
+    <div id="result" hidden></div>
+
+</main>
+
+<script type="module" src="app.js"></script>
+
+</body>
+</html>
