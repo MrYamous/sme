@@ -23,7 +23,11 @@ form.addEventListener("submit", e => {
 
     const fuelMultiplier = Number(fuelMultiplierInput.value);
 
-    const price = calculatePrice(department, bottles, fuelMultiplier);
+    const options = {
+        appointment: document.querySelector("#appointment").checked,
+    };
+
+    const price = calculatePrice(department, bottles, fuelMultiplier, options);
 
     result.hidden = false;
 
@@ -46,29 +50,32 @@ function calculateParcelPrice(department, bottles) {
     return pricing.departments[department][index];
 }
 
-function calculatePrice(department, bottles, fuelMultiplier) {
-    if (bottles <= 78) {
-        return [
+function calculatePrice(department, bottles, fuelMultiplier, options) {
+    const calculations = bottles <= 78
+        ? [{
+            method: "parcel",
+            price: calculateParcelPrice(department, bottles),
+        }]
+        : [
             {
-                method: "parcel",
-                price: calculateParcelPrice(department, bottles) * fuelMultiplier,
+                method: "weight",
+                price: calculateWeightPrice(department, bottles),
+            },
+            {
+                method: "pallet",
+                price: calculatePalletPrice(department, bottles),
             }
         ];
-    }
 
-    const weightPrice = calculateWeightPrice(department, bottles);
-    const palletPrice = calculatePalletPrice(department, bottles);
-
-    return [
-        {
-            method: "weight",
-            price: weightPrice * fuelMultiplier,
-        },
-        {
-            method: "pallet",
-            price: palletPrice,
-        }
-    ];
+    return calculations.map(calculation => ({
+        ...calculation,
+        price: applyAdjustments(
+            calculation.price,
+            calculation.method,
+            fuelMultiplier,
+            options,
+        ),
+    }));
 }
 
 function calculateWeightPrice(department, bottles) {
@@ -97,4 +104,24 @@ function calculatePalletPrice(department, bottles) {
     }
 
     return null;
+}
+
+function applyAdjustments(price, method, fuelMultiplier, options) {
+    if (method === "pallet" || method === "weight") {
+        price *= fuelMultiplier;
+    }
+
+    price += calculateOptions(options);
+
+    return price;
+}
+
+function calculateOptions(options) {
+    let optionsPrice = 0;
+
+    if (options.appointment) {
+        optionsPrice += 8.69;
+    }
+
+    return optionsPrice;
 }
