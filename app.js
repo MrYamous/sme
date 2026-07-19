@@ -110,6 +110,7 @@ function applyAdjustments(price, method, fuelMultiplier, options) {
     if (method === "pallet" || method === "weight") {
         price *= fuelMultiplier;
     }
+    price += calculateAutomaticSurcharges(departmentSelect.value);
 
     price += calculateOptions(options);
 
@@ -124,4 +125,12 @@ function calculateOptions(options) {
     }
 
     return optionsPrice;
+}
+
+function calculateAutomaticSurcharges(department) {
+    if (["75", "77", "78", "91", "92", "93", "94", "95"].includes(department)) {
+        return 7.52;
+    }
+
+    return 0;
 }
