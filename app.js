@@ -99,11 +99,7 @@ function calculatePalletPrice(department, bottles) {
         return pricing.pallet.one[department];
     }
 
-    if (pallets === 2) {
-        return pricing.pallet.two[department];
-    }
-
-    return null;
+    throw new Error("Nombre de palettes non supporté");
 }
 
 function applyAdjustments(price, method, fuelMultiplier, options) {
