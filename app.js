@@ -81,10 +81,6 @@ function calculatePrice(department, bottles, fuelMultiplier, options) {
 function calculateWeightPrice(department, bottles) {
     const weight = bottles * 1.240;
 
-    if (weight < 100) {
-        return null;
-    }
-
     if (weight <= 250) {
         return pricing.weight.price100to250[department] * (weight / 100);
     }
@@ -103,7 +99,7 @@ function calculatePalletPrice(department, bottles) {
 }
 
 function applyAdjustments(price, method, fuelMultiplier, options) {
-    if (method === "pallet" || method === "weight") {
+    if (method === "parcel" || method === "weight") {
         price *= fuelMultiplier;
     }
     price += calculateAutomaticSurcharges(departmentSelect.value);
