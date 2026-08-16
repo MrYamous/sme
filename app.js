@@ -34,7 +34,7 @@ form.addEventListener("submit", e => {
     result.innerHTML = price
         .map(item => `
             <div>
-                ${item.method} : <strong>${item.price.toFixed(2)} €</strong>
+                ${item.method} : <strong>${item.price.toFixed(2)} € HT</strong>
             </div>
         `)
         .join("");
