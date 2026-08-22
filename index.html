@@ -13,10 +13,15 @@
 
     <form id="calculator">
 
-        <label>
-            Département
-            <select id="department"></select>
-        </label>
+        <input
+            type="text"
+            id="department"
+            name="department"
+            list="departments"
+            placeholder="Sélectionnez ou saisissez un département"
+        />
+
+        <datalist id="departments"></datalist>
 
         <label>
             Nombre de bouteilles

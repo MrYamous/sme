@@ -1,7 +1,7 @@
 const pricing = await fetch("pricing.json").then(r => r.json());
 
 const form = document.querySelector("#calculator");
-const departmentSelect = document.querySelector("#department");
+const departmentsList = document.querySelector("#departments");
 const result = document.querySelector("#result");
 
 const fuelMultiplierInput = document.querySelector("#fuelMultiplier");
@@ -14,14 +14,14 @@ for (const department of departments) {
     const option = document.createElement("option");
     option.value = department;
     option.textContent = department;
-    departmentSelect.append(option);
+    departmentsList.append(option);
 }
 
 form.addEventListener("submit", e => {
 
     e.preventDefault();
 
-    const department = departmentSelect.value;
+    const department = document.querySelector('#department').value;
     const bottles = Number(document.querySelector("#bottles").value);
 
     const fuelMultiplier = Number(fuelMultiplierInput.value);
@@ -108,7 +108,7 @@ function applyAdjustments(price, method, fuelMultiplier, options) {
     if (method === "parcel" || method === "weight") {
         price *= fuelMultiplier;
     }
-    price += calculateAutomaticSurcharges(departmentSelect.value);
+    price += calculateAutomaticSurcharges(document.querySelector('#department').value);
 
     price += calculateOptions(options);
 
