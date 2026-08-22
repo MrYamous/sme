@@ -7,7 +7,10 @@ const result = document.querySelector("#result");
 const fuelMultiplierInput = document.querySelector("#fuelMultiplier");
 fuelMultiplierInput.value = pricing.fuelMultiplier;
 
-for (const department of Object.keys(pricing.departments)) {
+const departments = Object.keys(pricing.departments)
+    .sort((a, b) => parseFloat(a) - parseFloat(b));
+
+for (const department of departments) {
     const option = document.createElement("option");
     option.value = department;
     option.textContent = department;
