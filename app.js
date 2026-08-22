@@ -34,7 +34,7 @@ form.addEventListener("submit", e => {
     result.innerHTML = price
         .map(item => `
             <div>
-                ${item.method} : <strong>${item.price.toFixed(2)} € HT</strong>
+                ${item.label} : <strong>${item.price.toFixed(2)} € HT</strong>
             </div>
         `)
         .join("");
@@ -53,15 +53,18 @@ function calculateParcelPrice(department, bottles) {
 function calculatePrice(department, bottles, fuelMultiplier, options) {
     const calculations = bottles <= 78
         ? [{
+            label: "Colis",
             method: "parcel",
             price: calculateParcelPrice(department, bottles),
         }]
         : [
             {
+                label: "Poids",
                 method: "weight",
                 price: calculateWeightPrice(department, bottles),
             },
             {
+                label: "Palette",
                 method: "pallet",
                 price: calculatePalletPrice(department, bottles),
             }
@@ -79,7 +82,7 @@ function calculatePrice(department, bottles, fuelMultiplier, options) {
 }
 
 function calculateWeightPrice(department, bottles) {
-    const weight = bottles * 1.240;
+    const weight = bottles * 1.250;
 
     if (weight <= 250) {
         return pricing.weight.price100to250[department] * (weight / 100);
