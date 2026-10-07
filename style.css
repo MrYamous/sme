@@ -27,6 +27,16 @@ label {
     gap: .4rem;
 }
 
+.appointment-label {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.appointment-label input {
+    padding: 0;
+}
+
 input,
 select,
 button {
