@@ -105,9 +105,8 @@ function calculatePalletPrice(department, bottles) {
 }
 
 function applyAdjustments(price, method, fuelMultiplier, options) {
-    if (method === "parcel" || method === "weight") {
-        price *= fuelMultiplier;
-    }
+    price *= fuelMultiplier;
+
     price += calculateAutomaticSurcharges(document.querySelector('#department').value);
 
     price += calculateOptions(options);
