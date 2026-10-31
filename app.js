@@ -5,7 +5,25 @@ const departmentsList = document.querySelector("#departments");
 const result = document.querySelector("#result");
 
 const fuelMultiplierInput = document.querySelector("#fuelMultiplier");
-fuelMultiplierInput.value = pricing.fuelMultiplier;
+const fuelMultiplierStorageKey = "fuelMultiplier";
+
+try {
+    const savedFuelMultiplier = localStorage.getItem(fuelMultiplierStorageKey);
+    fuelMultiplierInput.value = savedFuelMultiplier !== null
+        && savedFuelMultiplier.trim() !== ""
+        && Number.isFinite(Number(savedFuelMultiplier))
+        ? savedFuelMultiplier : pricing.fuelMultiplier;
+} catch {
+    fuelMultiplierInput.value = pricing.fuelMultiplier;
+}
+
+function saveFuelMultiplier() {
+    const value = fuelMultiplierInput.value;
+
+    localStorage.setItem(fuelMultiplierStorageKey, value);
+}
+
+fuelMultiplierInput.addEventListener("change", saveFuelMultiplier);
 
 const departments = Object.keys(pricing.departments)
     .sort((a, b) => parseFloat(a) - parseFloat(b));
@@ -20,6 +38,7 @@ for (const department of departments) {
 form.addEventListener("submit", e => {
 
     e.preventDefault();
+    saveFuelMultiplier();
 
     const department = document.querySelector('#department').value;
     const bottles = Number(document.querySelector("#bottles").value);
