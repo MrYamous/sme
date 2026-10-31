@@ -31,6 +31,7 @@ form.addEventListener("submit", e => {
     };
 
     const price = calculatePrice(department, bottles, fuelMultiplier, options);
+    const weight = bottles * 1.250;
 
     result.hidden = false;
 
@@ -38,6 +39,9 @@ form.addEventListener("submit", e => {
         .map(item => `
             <div>
                 ${item.label} : <strong>${item.price.toFixed(2)} € HT</strong>
+            </div>
+            <div>
+                <small>Poids : ${weight.toFixed(2)} kg</small>
             </div>
         `)
         .join("");
